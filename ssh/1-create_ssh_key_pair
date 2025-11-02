@@ -6,16 +6,10 @@ KEY_NAME="school"
 KEY_BITS=4096
 PASSPHRASE="betty"
 
-# Check if key already exists to avoid overwriting
-if [ -f "$KEY_NAME" ] || [ -f "$KEY_NAME.pub" ]; then
-    echo "Key '$KEY_NAME' already exists. Exiting."
-    exit 1
-fi
+# Generate RSA key pair without overwriting existing keys
+ssh-keygen -t rsa -b $KEY_BITS -f $KEY_NAME -N $PASSPHRASE -q
 
-# Generate RSA key pair
-ssh-keygen -t rsa -b $KEY_BITS -f $KEY_NAME -N $PASSPHRASE
-
-# Confirm key creation
+# Confirm creation
 if [ -f "$KEY_NAME" ]; then
     echo "RSA private key '$KEY_NAME' successfully created."
 else
