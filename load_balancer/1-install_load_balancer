@@ -10,7 +10,7 @@ printf %s "listen 5819-webs
     bind *:80
     mode http
     balance roundrobin
-    server 6917-web-01 3.93.143.209:80 check
-    server 6917-web-02 98.82.2.172:80 check
+    server 6917-web-01 54.83.174.153:80 check
+    server 6917-web-02 52.86.167.210:80 check
 " >> /etc/haproxy/haproxy.cfg
 sudo service haproxy restart
