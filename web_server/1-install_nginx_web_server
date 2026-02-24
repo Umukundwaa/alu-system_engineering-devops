@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-# Install nginx web server
+# Installs and configures nginx web server
 
-sudo apt-get update -y
-sudo apt-get install -y nginx
-cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-sed -i 's/\(listen \)[0-9]\+\(.*\)/\180\2/' /etc/nginx/sites-available/default
-sudo echo "Holberton School for the win!" > /var/www/html/index.html
-sudo service nginx restart
+# Install nginx
+apt-get update -y
+apt-get install -y nginx
+
+# Create index page with Holberton School
+echo "Holberton School" > /var/www/html/index.nginx-debian.html
+
+# Restart nginx without systemctl
+service nginx restart
