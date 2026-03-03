@@ -1,145 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 - Page Lost</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: radial-gradient(circle at bottom, #020311 0%, #000 100%);
-      color: #fff;
-      font-family: "Poppins", sans-serif;
-      overflow: hidden;
-    }
-
-    .container {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-      z-index: 2;
-    }
-
-    h1 {
-      font-size: 120px;
-      font-weight: 900;
-      letter-spacing: -3px;
-      background: linear-gradient(135deg, #da00ff, #5900ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: glow 3s infinite ease-in-out;
-    }
-
-    @keyframes glow {
-      0%, 100% { filter: drop-shadow(0 0 10px #da00ff); }
-      50% { filter: drop-shadow(0 0 20px #5900ff); }
-    }
-
-    p.subtitle {
-      font-size: 26px;
-      margin-bottom: 10px;
-      color: #a579ff;
-    }
-
-    p.message {
-      font-size: 18px;
-      color: #b3b3b3;
-      max-width: 500px;
-      margin-bottom: 30px;
-    }
-
-    .btn {
-      padding: 14px 35px;
-      background: linear-gradient(135deg, #da00ff, #5900ff);
-      border-radius: 50px;
-      color: #fff;
-      font-size: 18px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.3s ease;
-      box-shadow: 0 0 20px rgba(140, 0, 255, 0.4);
-    }
-
-    .btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 30px rgba(140, 0, 255, 0.6);
-    }
-
-    /* Floating planet */
-    .planet {
-      width: 180px;
-      height: 180px;
-      background: radial-gradient(circle, #da00ff, #5900ff);
-      border-radius: 50%;
-      position: absolute;
-      top: 15%;
-      right: 10%;
-      animation: floatPlanet 6s infinite ease-in-out;
-      filter: blur(1px) brightness(1.3);
-      opacity: 0.7;
-    }
-
-    @keyframes floatPlanet {
-      0%, 100% { transform: translateY(0) }
-      50% { transform: translateY(-25px) }
-    }
-
-    /* Stars */
-    .star {
-      position: fixed;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 3s infinite;
-      opacity: 0.6;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.2 }
-      50% { opacity: 1 }
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>404 Lost in Space</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#03010a;--accent:#ff4d6d;--accent2:#c77dff;--dim:#555577}
+html,body{width:100%;height:100%;background:var(--bg);color:#e0e0e0;font-family:monospace;overflow:hidden}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
+.container{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;padding:2rem}
+.big-404{font-size:clamp(6rem,20vw,16rem);font-weight:900;color:var(--accent);line-height:1}
+.tagline{font-size:1.5rem;color:var(--accent);text-transform:uppercase;margin:1rem 0}
+.sub{color:var(--dim);margin-bottom:1.5rem;line-height:1.7}
+.required-string{color:var(--dim);margin-bottom:2rem;font-size:0.8rem}
+.btn{padding:0.75rem 2rem;border:1px solid var(--accent);color:var(--accent);text-decoration:none;font-size:0.8rem;text-transform:uppercase}
+.scan-line{position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);animation:scan 5s linear infinite;opacity:0.4}
+@keyframes scan{0%{top:0}100%{top:100%}}
+</style>
 </head>
-
 <body>
-  <div id="stars"></div>
-  <div class="planet"></div>
-
-  <div class="container">
-    <h1>404</h1>
-    <p class="subtitle">Oops... We lost the page!</p>
-    <p class="message">
-      Looks like this page drifted into deep space.  
-      Our system can’t locate it anymore.
-    </p>
-    <a href="/" class="btn">Return to Base</a>
-  </div>
-
-  <script>
-    // Create stars
-    const starContainer = document.getElementById("stars");
-
-    for (let i = 0; i < 120; i++) {
-      const s = document.createElement("div");
-      s.className = "star";
-      s.style.left = Math.random() * 100 + "%";
-      s.style.top = Math.random() * 100 + "%";
-      s.style.animationDuration = (Math.random() * 3 + 2) + "s";
-      starContainer.appendChild(s);
-    }
-  </script>
-
+<canvas id="stars"></canvas>
+<div class="scan-line"></div>
+<div class="container">
+<div class="big-404">404</div>
+<p class="tagline">Signal Lost</p>
+<p class="sub">Houston, we have a problem.<br>The page drifted into the void.</p>
+<p class="required-string">Ceci n est pas une page</p>
+<a href="/" class="btn">Return to base</a>
+</div>
+<script>
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+let stars=[];
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;stars=Array.from({length:200},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.5,a:Math.random(),speed:Math.random()*0.3+0.05}));}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{s.a+=s.speed*0.01;const o=(Math.sin(s.a)+1)/2;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle="rgba(255,255,255,"+o*0.8+")";ctx.fill();});requestAnimationFrame(draw);}
+window.addEventListener("resize",resize);resize();draw();
+</script>
 </body>
 </html>
