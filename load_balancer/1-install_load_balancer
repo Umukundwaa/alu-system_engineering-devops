@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
-#Bash script that installs HAProxy & makes configurations
+# Installs and configures HAproxy load balancer
+apt-get update -y
+apt-get install -y haproxy
 
-apt-get -y install software-properties-common
-add-apt-repository ppa:vbernat/haproxy-1.8
-apt-get update
-apt-get -y install haproxy
-echo "ENABLED=1" >> /etc/default/haproxy
-printf %s "listen 5819-webs
-    bind *:80
-    mode http
-    balance roundrobin
-    server 6917-web-01 54.83.174.153:80 check
-    server 6917-web-02 52.86.167.210:80 check
-" >> /etc/haproxy/haproxy.cfg
-sudo service haproxy restart
+# Configure HAproxy
+printf "global\n\tlog /dev/log local0\n\tmaxconn 2048\n\tuser haproxy\n\tgroup haproxy\n\tdaemon\n\ndefaults\n\tlog global\n\tmode http\n\toption httplog\n\toption dontlognull\n\tretries 3\n\toption redispatch\n\ttimeout connect 5000\n\ttimeout client 50000\n\ttimeout server 50000\n\nfrontend http_front\n\tbind *:80\n\tdefault_backend http_back\n\nbackend http_back\n\tbalance roundrobin\n\tserver 6790-web-01 44.211.147.102:80 check\n\tserver 6790-web-02 35.174.154.227:80 check\n" > /etc/haproxy/haproxy.cfg
+
+# Enable HAproxy init script
+echo "ENABLED=1" > /etc/default/haproxy
+
+# Restart HAproxy
+service haproxy restart
