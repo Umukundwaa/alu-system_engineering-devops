@@ -1,26 +1,7 @@
 #!/usr/bin/env bash
-# Configure Nginx server so that X-Served-By header is added
-
-# Update & install Nginx
-sudo apt-get update -y
-sudo apt-get install -y nginx
-
-# Backup default config
-sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-
-# Create new Nginx config
-sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
-    server_name _;
-
-    # Custom header for load balancer
-    add_header X-Served-By \$hostname;
-}
-EOF
-
-# Restart Nginx to apply changes
-sudo systemctl restart nginx
+# Configures Nginx with custom X-Served-By response header
+apt-get update -y
+apt-get install -y nginx
+echo "Holberton School" > /var/www/html/index.nginx-debian.html
+printf "server {\n\tlisten 80 default_server;\n\tlisten [::]:80 default_server;\n\troot /var/www/html;\n\tindex index.html index.htm index.nginx-debian.html;\n\tserver_name _;\n\tadd_header X-Served-By \$HOSTNAME;\n\tlocation / {\n\t\ttry_files \$uri \$uri/ =404;\n\t}\n}\n" > /etc/nginx/sites-available/default
+service nginx restart
